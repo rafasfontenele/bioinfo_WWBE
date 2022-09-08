@@ -269,7 +269,7 @@ Run cov-dist with the following command:
 Examples uder files folder for -f `bamfiles_path.txt` and -m `metadata_covdist.tsv`
 
 ```{bash}
-python3 Cov-dist/covdist.py -f files/<file_path_bam_files> -t 72 -o cov-dit_process/<output_folder_name> -m files/<metadata_format_cov-dist> -v cov-dist_process/pcoa_snvs_formatted_<date_Usher_download>.tsv
+python3 Cov-Dist/covdist.py -f files/<file_path_bam_files> -t 72 -o cov-dit_process/<output_folder_name> -m files/<metadata_format_cov-dist> -v cov-dist_process/pcoa_snvs_formatted_<date_Usher_download>.tsv
 ```
 
 ### Analysis to identifying novel SNVs 
