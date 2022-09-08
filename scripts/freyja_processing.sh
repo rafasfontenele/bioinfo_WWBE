@@ -2,13 +2,13 @@
 
 #freyja update - run this to update the Usher tree for freyja
 filename=$1
-wd=$(pwd)
+dir=$(pwd)
 
 lines=$(cat $filename)
-refs="/gpfs/gsfs12/users/Irp-jiang/share/covid_data/WWBE/info/"
+base="${dir}/samples_process/analysis/"
 
 for line in $lines;
 do
     prefix=$(echo $line | cut -d "/" -f 12 | cut -d "_" -f 1)
-    freyja demix ${line}_trimmed_union.vcf depth/${prefix}.depth --output freyja_output/${prefix}_freyja
+    freyja demix ${base}vcffiles/${line}_trimmed_union_snpEff.vcf ${base}depth/${prefix}.depth --output ${dir}/freyja_process/${prefix}_freyja
 done

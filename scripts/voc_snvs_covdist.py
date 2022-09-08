@@ -1,18 +1,21 @@
 import pandas as pd
-import pickle
+#import pickle
 import sys
+import os
 
-version =sys.argv[1]
+version = sys.argv[1]
 
-
-data = pd.read_pickle("/gpfs/gsfs12/users/Irp-jiang/share/rafa_data/GISAID_processing_WWBE/Usher_processing/"+version+"/lineagePaths_edited_"+version+".pkl") #, sep="\t", header=None, names=("SNV", "VOC"))
+locDir = os.path.abspath(os.path.join(os.path.realpath(__file__), os.pardir))
+mainDir = os.path.abspath(os.path.join(locDir, os.pardir))
+file_path = os.path.join(mainDir, "usher_process", version, "")
+data = pd.read_pickle(file_path+"lineagePaths_edited_"+version+".pkl") #, sep="\t", header=None, names=("SNV", "VOC"))
 data = data.explode("SNVs")
 
 lineages = []
 ref_id_list = []
 SNV = []
 ref = []
-alt =[]
+alt = []
 pos = []
 new_data = pd.DataFrame()
 metadata = pd.DataFrame()
@@ -37,23 +40,24 @@ new_data["VOC"] = lineages
 
 lineages_names = list(set(lineages))
 metadata["names"] = lineages_names
-type=[]
-date=[]
-location=[]
-for i,row in metadata.iterrows():
-    if row['names'].startswith("AY.") or row["names"]=="B.1.617.2":
+type = []
+date = []
+location = []
+for i, row in metadata.iterrows():
+    if row['names'].startswith("AY.") or row["names"] == "B.1.617.2":
         type.append("Delta")
         location.append("Delta")
         date.append("2021-07-01")
-    if row['names'].startswith("BA.") or row["names"]=="B.1.1.529" or row["names"].startswith("BE.") or row["names"].startswith("BF.") or row["names"].startswith("BK.") or row["names"].startswith("BJ.") \
+    if row['names'].startswith("BA.") or row["names"] == "B.1.1.529" or row["names"].startswith("BE.") or row["names"].startswith("BF.") or row["names"].startswith("BK.") or row["names"].startswith("BJ.") \
             or row["names"].startswith("BH.") or row["names"].startswith("BG.") or row["names"].startswith("BD.") or row["names"].startswith("BC."):
         type.append("Omicron")
         location.append("Omicron")
         date.append("2021-12-01")
-    
+
 metadata["type"] = type
 metadata["location"] = location
 metadata["date"] = date
 
-new_data.to_csv("pcoa_snvs_formatted_"+str(version)+"_updated.tsv", sep="\t", index=None)
-metadata.to_csv("metadata_voc_snvs_"+str(version)+"_updated.tsv", sep="\t", index=None)
+final_path = os.path.join(mainDir, "cov-dist_process", "")
+new_data.to_csv(final_path+"pcoa_snvs_formatted_"+str(version)+".tsv", sep="\t", index=None)
+metadata.to_csv(final_path+"metadata_voc_snvs_"+str(version)+".tsv", sep="\t", index=None)
