@@ -83,18 +83,18 @@ Place downloaded GISAID `sequence.fasta` and `metadata.tsv` files in the folder 
 
 Process GISAID data with the following scripts:
 
-..1.Pre-processing
+  1.Pre-processing
 ```{bash}
 /bin/bash ./scripts/gisaid_processing_1.sh <date_GISAID_download>
 ```
 After this step, go to GISAID and download the sequences present in the `gisaid_process/<date_GISAID_download>/01.preprocessing/redo.list` output file and save them as `gisaid_process/<date_GISAID_download>/01.preprocessing/redo_sequences.fasta`
 
-..2. Running Nextclade and Pangolin - scripts setup for docker versions and to run using singularity
+  2. Running Nextclade and Pangolin - scripts setup for docker versions and to run using singularity
 ```{bash}
 /bin/bash ./scripts/gisaid_processing_2.sh <date_GISAID_download>
 ```
 
-..3.Processing Nexclade and Pangolin outputs to obtain insertions, deletions and SNVs associated with each pangolin lineages based on a frequency threshold (used 75.0 (75%))
+  3.Processing Nexclade and Pangolin outputs to obtain insertions, deletions and SNVs associated with each pangolin lineages based on a frequency threshold (used 75.0 (75%))
 ```{bash}
 /bin/bash ./scripts/gisaid_processing_3.sh <date_GISAID_download> <frequency_cuttoff>
 ```
