@@ -62,15 +62,18 @@ sed -r --sandbox -e 's/^(#CHROM.+)$/##FILTER=<ID=AmpliconRemoval,Description="Va
 echo "Intersected vcf re-named"
 
 #vcf files union
-vcfintersect -r "${refs}"NC_045512.2.fasta -w 0 -u "${analysis}vcffiles/${sample}"_trimmed_renamed.vcf  "${analysis}vcffiles/${sample}"_trimmed_v2.vcf > "${analysis}vcffiles/${sample}"_trimmed_union.vcf
+vcfintersect -r "${refs}"NC_045512.2.fasta -w 0 -u "${analysis}vcffiles/${sample}"_trimmed_v2.vcf  "${analysis}vcffiles/${sample}"_trimmed_renamed.vcf > "${analysis}vcffiles/${sample}"_trimmed_union.vcf
 lofreq filter -V 0 -v 0 -a 0.0 -A 0.0 -b fdr -c 0.001 --print-all -i "${analysis}vcffiles/${sample}"_trimmed_union.vcf -o "${analysis}vcffiles/${sample}"_trimmed_union_filtered.vcf
-echo "Final vcf created - union of vcf_trimmed_renamed with vcf_trimmed_v2"
+echo "Final vcf created - union of vcf_trimmed_v2 with vcf_trimmed_renamed"
 
 #annotation
 #wget https://snpeff.blob.core.windows.net/databases/v5_0/snpEff_v5_0_NC_045512.2.zip
 #unzip snpEff_v5_0_NC_045512.2.zip will create data folder - This is under files folder. In case you ran into issues follow those steps to downlaod again.
 snpEff eff -nodownload -dataDir ${refs}data -i vcf -o vcf -formatEff -classic -no-downstream -no-intergenic -no-upstream -ud 0 -stats "${analysis}vcffiles/${sample}"stats.html -noLog NC_045512.2 "${analysis}vcffiles/${sample}"_trimmed_union_filtered.vcf > "${analysis}vcffiles/${sample}"_trimmed_union_snpEff.vcf
 echo "Final VCF annotated"
+
+#Filtering "AmpliconRemoval" associated SNPs
+vcftools --vcf "${analysis}vcffiles/${sample}"_trimmed_union_snpEff.vcf --remove-filtered AmpliconRemoval --recode --recode-INFO-all --stdout -c > "${analysis}vcffiles/${sample}"_trimmed_union_snpEff_filtered.vcf
 
 /data/salgadofontenr2/conda/envs/cov-dist/bin/python "${dir}/scripts/"add_variants_tsv.py  "${analysis}vcffiles/${sample}"_trimmed_union_snpEff.vcf  "${analysis}tsvfiles/${sample}"_trimmed_union_snpEff_final.tsv
 
