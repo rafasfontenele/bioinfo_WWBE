@@ -21,9 +21,10 @@ def read_lofreq(filename):
                                          "REF_DP", "REF_RV", "ALT_DP", "ALT_RV",
                                          "AF", "TOTAL_DP", "STRAND-BIAS", "EFFECT"])
     vcf_reader = vcf.Reader(filename=filename)
+    lofreq_lines = []
     for row in vcf_reader:
         if len(row.FILTER) == 0 and "EFF" not in row.INFO:
-            lofreq_calls = lofreq_calls.append({"REGION": row.CHROM,
+            lofreq_lines.append({"REGION": row.CHROM,
                                                 "POS": int(row.POS),
                                                 "REF": str(row.REF),
                                                 "ALT": str(row.ALT[0]),
@@ -37,10 +38,9 @@ def read_lofreq(filename):
                                                 "TOTAL_DP": row.INFO["DP"],
                                                 "STRAND-BIAS": row.INFO["SB"],
                                                 "EFF": ""
-                                                },
-                                                ignore_index=True)
+                                                })
         if len(row.FILTER) > 0 and "EFF" in row.INFO:
-            lofreq_calls = lofreq_calls.append({"REGION": row.CHROM,
+            lofreq_lines.append({"REGION": row.CHROM,
                                                 "POS": int(row.POS),
                                                 "REF": str(row.REF),
                                                 "ALT": str(row.ALT[0]),
@@ -54,10 +54,9 @@ def read_lofreq(filename):
                                                 "TOTAL_DP": row.INFO["DP"],
                                                 "STRAND-BIAS": row.INFO["SB"],
                                                 "EFF": row.INFO["EFF"]
-                                                },
-                                                ignore_index=True)
+                                                })
         if len(row.FILTER) == 0 and "EFF" in row.INFO:
-            lofreq_calls = lofreq_calls.append({"REGION": row.CHROM,
+            lofreq_lines.append({"REGION": row.CHROM,
                                                 "POS": int(row.POS),
                                                 "REF": str(row.REF),
                                                 "ALT": str(row.ALT[0]),
@@ -71,10 +70,9 @@ def read_lofreq(filename):
                                                 "TOTAL_DP": row.INFO["DP"],
                                                 "STRAND-BIAS": row.INFO["SB"],
                                                 "EFF": row.INFO["EFF"],
-                                                },
-                                                ignore_index=True)
+                                                })
         if len(row.FILTER) > 0 and "EFF" not in row.INFO:
-            lofreq_calls = lofreq_calls.append({"REGION": row.CHROM,
+            lofreq_lines.append({"REGION": row.CHROM,
                                                 "POS": int(row.POS),
                                                 "REF": str(row.REF),
                                                 "ALT": str(row.ALT[0]),
@@ -88,8 +86,9 @@ def read_lofreq(filename):
                                                 "TOTAL_DP": row.INFO["DP"],
                                                 "STRAND-BIAS": row.INFO["SB"],
                                                 "EFF": ""
-                                                },
-                                                ignore_index=True)
+                                                })
+    df = pd.DataFrame.from_records(lofreq_lines)
+    lofreq_calls = pd.concat([lofreq_calls, df])
     if lofreq_calls.empty:
         return lofreq_calls
     lofreq_calls["Variant"] = lofreq_calls.apply(lambda row:
