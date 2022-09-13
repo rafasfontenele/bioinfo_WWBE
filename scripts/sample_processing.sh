@@ -73,6 +73,7 @@ snpEff eff -nodownload -dataDir ${refs}data -i vcf -o vcf -formatEff -classic -n
 echo "Final VCF annotated"
 
 #Filtering "AmpliconRemoval" associated SNPs
+module load vcftools
 vcftools --vcf "${analysis}vcffiles/${sample}"_trimmed_union_snpEff.vcf --remove-filtered AmpliconRemoval --recode --recode-INFO-all --stdout -c > "${analysis}vcffiles/${sample}"_trimmed_union_snpEff_filtered.vcf
 
 /data/salgadofontenr2/conda/envs/cov-dist/bin/python "${dir}/scripts/"add_variants_tsv.py  "${analysis}vcffiles/${sample}"_trimmed_union_snpEff.vcf  "${analysis}tsvfiles/${sample}"_trimmed_union_snpEff_final.tsv
