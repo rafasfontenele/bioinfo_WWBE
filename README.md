@@ -18,7 +18,7 @@ cd bioinfo_WWBE
 docker build -t wwbe .
 ```
 
-## 2. Individual sample processing
+## 2. Primer trimming and variant calling
 
 Place paired-end fastq files in the folder `raw_data/`
 
