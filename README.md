@@ -49,7 +49,7 @@ This will output the following files
 * `<output>/fastqfiles/<sample_name>_2.fq.gz`
 * `<output>/freyja/<sample_name>.freyja`
 
-## Recover relative lineage abundances using [Freyja](https://github.com/andersen-lab/Freyja)
+## 3. Recover relative lineage abundances using [Freyja](https://github.com/andersen-lab/Freyja)
 
 After running alls samples aggregate the date using the freyja command
 
@@ -59,5 +59,5 @@ freyja aggregate freyja/ --output [aggregated-filename.tsv]
 This will output the following files
 * `[aggregated-filename.tsv]` - freyja aggregated output
 
-## Ordination analysis with [CoV-Dist](https://github.com/nlm-irp-jianglab/CoV-Dist)
+## 4. Ordination analysis with [CoV-Dist](https://github.com/nlm-irp-jianglab/CoV-Dist)
 
