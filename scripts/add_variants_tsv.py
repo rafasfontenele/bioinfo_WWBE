@@ -1,3 +1,4 @@
+#!/user/bin/env python
 import pandas as pd
 import sys
 import vcf
@@ -17,14 +18,12 @@ GENE_MAP = {'ORF1a': [266, 13468],
 
 
 def read_lofreq(filename):
-    lofreq_calls = pd.DataFrame(columns=["REGION", "POS", "REF", "ALT", "QUAL", "FILTER",
-                                         "REF_DP", "REF_RV", "ALT_DP", "ALT_RV",
-                                         "AF", "TOTAL_DP", "STRAND-BIAS", "EFFECT"])
+    lofreq_list  = []
+    #lofreq_calls = pd.DataFrame(columns=["REGION", "POS", "REF", "ALT", "QUAL", "FILTER", "REF_DP", "REF_RV", "ALT_DP", "ALT_RV", "AF", "TOTAL_DP", "STRAND-BIAS", "EFFECT"])
     vcf_reader = vcf.Reader(filename=filename)
-    lofreq_lines = []
     for row in vcf_reader:
         if len(row.FILTER) == 0 and "EFF" not in row.INFO:
-            lofreq_lines.append({"REGION": row.CHROM,
+            lofreq_list.append({"REGION": row.CHROM,
                                                 "POS": int(row.POS),
                                                 "REF": str(row.REF),
                                                 "ALT": str(row.ALT[0]),
@@ -40,7 +39,7 @@ def read_lofreq(filename):
                                                 "EFF": ""
                                                 })
         if len(row.FILTER) > 0 and "EFF" in row.INFO:
-            lofreq_lines.append({"REGION": row.CHROM,
+            lofreq_list.append({"REGION": row.CHROM,
                                                 "POS": int(row.POS),
                                                 "REF": str(row.REF),
                                                 "ALT": str(row.ALT[0]),
@@ -56,7 +55,7 @@ def read_lofreq(filename):
                                                 "EFF": row.INFO["EFF"]
                                                 })
         if len(row.FILTER) == 0 and "EFF" in row.INFO:
-            lofreq_lines.append({"REGION": row.CHROM,
+            lofreq_list.append({"REGION": row.CHROM,
                                                 "POS": int(row.POS),
                                                 "REF": str(row.REF),
                                                 "ALT": str(row.ALT[0]),
@@ -72,7 +71,7 @@ def read_lofreq(filename):
                                                 "EFF": row.INFO["EFF"],
                                                 })
         if len(row.FILTER) > 0 and "EFF" not in row.INFO:
-            lofreq_lines.append({"REGION": row.CHROM,
+            lofreq_list.append({"REGION": row.CHROM,
                                                 "POS": int(row.POS),
                                                 "REF": str(row.REF),
                                                 "ALT": str(row.ALT[0]),
@@ -87,8 +86,8 @@ def read_lofreq(filename):
                                                 "STRAND-BIAS": row.INFO["SB"],
                                                 "EFF": ""
                                                 })
-    df = pd.DataFrame.from_records(lofreq_lines)
-    lofreq_calls = pd.concat([lofreq_calls, df])
+        lofreq_calls = pd.DataFrame.from_records(lofreq_list)
+
     if lofreq_calls.empty:
         return lofreq_calls
     lofreq_calls["Variant"] = lofreq_calls.apply(lambda row:

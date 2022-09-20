@@ -1,3 +1,0 @@
-<user_base_directory>/samples_process/analysis/bamfiles/<sample_name>.trimmed.realigned.indelqual.readsrem.bam
-<user_base_directory>/samples_process/analysis/bamfiles/<sample_name>.trimmed.realigned.indelqual.readsrem.bam
-<user_base_directory>/samples_process/analysis/bamfiles/<sample_name>.trimmed.realigned.indelqual.readsrem.bam
